@@ -1,51 +1,75 @@
-interface Command {
-    void execute();
-}
-class Light {
+class Student {
+    private String name;
+    private int id;
+    private String grade;
 
-    public void turnOn() {
-        System.out.println("Light is ON");
+    public Student(String name, int id, String grade) {
+        this.name = name;
+        this.id = id;
+        this.grade = grade;
     }
-    public void turnOff() {
-        System.out.println("Light is OFF");
+    public String getName() {
+        return name;
+    }
+    public int getId() {
+        return id;
+    }
+    public String getGrade() {
+        return grade;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+    public void setGrade(String grade) {
+        this.grade = grade;
     }
 }
-class LightOnCommand implements Command {
-    private Light light;
-    public LightOnCommand(Light light) {
-        this.light = light;
-    }
-    public void execute() {
-        light.turnOn();
-    }
-}
-class LightOffCommand implements Command {
-    private Light light;
-    public LightOffCommand(Light light) {
-        this.light = light;
-    }
-    public void execute() {
-        light.turnOff();
+class StudentView {
+    public void displayStudentDetails(String name, int id, String grade) {
+        System.out.println("Student Details");
+        System.out.println("----------------");
+        System.out.println("Name  : " + name);
+        System.out.println("ID    : " + id);
+        System.out.println("Grade : " + grade);
     }
 }
-class RemoteControl {
-    private Command command;
-    public void setCommand(Command command) {
-        this.command = command;
+class StudentController {
+    private Student model;
+    private StudentView view;
+    public StudentController(Student model, StudentView view) {
+        this.model = model;
+        this.view = view;
     }
-    public void pressButton() {
-        command.execute();
+    public void setStudentName(String name) {
+        model.setName(name);
+    }
+    public void setStudentId(int id) {
+        model.setId(id);
+    }
+    public void setStudentGrade(String grade) {
+        model.setGrade(grade);
+    }
+    public void updateView() {
+        view.displayStudentDetails(
+                model.getName(),
+                model.getId(),
+                model.getGrade());
     }
 }
 public class Main {
     public static void main(String[] args) {
-        Light light = new Light();
-        Command lightOn = new LightOnCommand(light);
-        Command lightOff = new LightOffCommand(light);
-        RemoteControl remote = new RemoteControl();
-        remote.setCommand(lightOn);
-        remote.pressButton();
-        remote.setCommand(lightOff);
-        remote.pressButton();
+        Student student = new Student("Usha", 101, "A");
+        StudentView view = new StudentView();
+        StudentController controller = new StudentController(student, view);
+        System.out.println("Initial Student Details:");
+        controller.updateView();
+        System.out.println();
+        controller.setStudentName("Rani");
+        controller.setStudentGrade("A+");
+        System.out.println("Updated Student Details:");
+        controller.updateView();
     }
 }
